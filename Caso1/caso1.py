@@ -47,9 +47,6 @@ def myNetwork():
     net.addLink(s4,h2)
 
     info( '*** Add routes\n')
-    h1.cmd('ip route add 192.168.100.0/29 via 10.0.1.1')
-    h1.cmd('ip route add 192.168.100.8/29 via 10.0.1.1')
-    h1.cmd('ip route add 10.0.2.0/24 via 10.0.1.1')
 
 
     info( '*** Starting network\n')
@@ -64,6 +61,25 @@ def myNetwork():
     net.get('s3').start([])
     net.get('s4').start([])
     info( '*** Post configure switches and hosts\n')
+    h1.cmd('ip route add 192.168.100.0/29 via 10.0.1.1')
+    h1.cmd('ip route add 192.168.100.8/29 via 10.0.1.1')
+    h1.cmd('ip route add 10.0.2.0/24 via 10.0.1.1')
+
+
+    h2.cmd('ip route add 192.168.100.8/29 via 10.0.2.1')
+    h2.cmd('ip route add 10.0.1.0/24 via 10.0.2.1')
+    h2.cmd('ip route add 192.168.100.0/29 via 10.0.2.1')
+
+
+    r1.cmd('ip route add 192.168.100.8/29 via 192.168.100.6 dev r1-eth1')
+    r1.cmd('ip route add 10.0.2.0/24 via 192.168.100.6 dev r1-eth1')
+
+
+    r2.cmd('ip route add 192.168.100.0/29 via 192.168.100.14 dev r2-eth1')
+    r2.cmd('ip route add 10.0.1.0/24 via 192.168.100.14 dev r2-eth1')
+
+    r0.cmd('ip route add 10.0.1.0/24 via 192.168.100.1 dev r0-eth1')
+    r0.cmd('ip route add 10.0.2.0/24 via 192.168.100.9 dev r0-eth2')
 
     CLI(net)
     net.stop()
